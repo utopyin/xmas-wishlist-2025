@@ -1,0 +1,33 @@
+{
+  "name": "@xmas-wishlist-2025/db",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {
+    "db:local": "turso dev --db-file local.db",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.2",
+    "@xmas-wishlist-2025/config": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.44.2",
+    "@libsql/client": "catalog:",
+    "libsql": "catalog:",
+    "dotenv": "^17.2.2",
+    "zod": "^4.1.11"
+  }
+}

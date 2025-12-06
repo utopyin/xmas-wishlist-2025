@@ -1,0 +1,75 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["ultracite/core", "ultracite/react"],
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**/*",
+      "!**/*.gen.ts",
+      "!**/worker-configuration.d.ts",
+      "!**/.output",
+      "!**/dist",
+      "!**/build",
+      "!**/.wrangler",
+      "!**/.turbo",
+      "!**/.tanstack",
+      "!**/.nitro",
+      "!**/drizzle/meta",
+      "!**/.alchemy",
+      "!**/*.lock",
+      "!!**/node_modules"
+    ]
+  },
+  "formatter": {
+    "indentWidth": 4
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.test.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": "off"
+          }
+        }
+      }
+    }
+  ],
+  "linter": {
+    "rules": {
+      "style": {
+        "noMagicNumbers": "off",
+        "useDefaultSwitchClause": "off",
+        "useBlockStatements": "off",
+        "useConsistentTypeDefinitions": "off"
+      },
+      "correctness": {
+        "noUnusedVariables": "warn",
+        "noUnusedImports": "warn"
+      },
+      "nursery": {
+        "noUnnecessaryConditions": "off"
+      },
+      "performance": {
+        "noImgElement": "off",
+        "noNamespaceImport": "off",
+        "noBarrelFile": "off"
+      },
+      "suspicious": {
+        "noConsole": "off",
+        "noHeadImportInDocument": "off",
+        "noEmptyBlockStatements": "off",
+        "noUnknownAtRules": "off",
+        "noConfusingVoidType": "off"
+      },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "off"
+      }
+    }
+  }
+}
