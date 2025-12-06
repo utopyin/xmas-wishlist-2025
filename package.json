@@ -19,10 +19,10 @@
     "check-types": "turbo check-types",
     "dev:native": "turbo -F native dev",
     "dev:web": "turbo -F web dev",
-    "db:push": "turbo -F @xmas-wishlist-2025/db db:push",
-    "db:studio": "turbo -F @xmas-wishlist-2025/db db:studio",
-    "db:generate": "turbo -F @xmas-wishlist-2025/db db:generate",
-    "db:migrate": "turbo -F @xmas-wishlist-2025/db db:migrate"
+    "db:push": "turbo -F @wishlist/db db:push",
+    "db:studio": "turbo -F @wishlist/db db:studio",
+    "db:generate": "turbo -F @wishlist/db db:generate",
+    "db:migrate": "turbo -F @wishlist/db db:migrate"
   },
   "dependencies": {
     "dotenv": "^17.2.2",

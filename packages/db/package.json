@@ -1,5 +1,5 @@
 {
-  "name": "@xmas-wishlist-2025/db",
+  "name": "@wishlist/db",
   "type": "module",
   "exports": {
     ".": {
@@ -17,17 +17,18 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.31.2",
-    "@xmas-wishlist-2025/config": "workspace:*"
+    "@wishlist/config": "workspace:*",
+    "drizzle-kit": "^1.0.0-beta.2-86f844e"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
-    "drizzle-orm": "^0.44.2",
     "@libsql/client": "catalog:",
-    "libsql": "catalog:",
+    "@wishlist/common": "workspace:*",
     "dotenv": "^17.2.2",
+    "drizzle-orm": "^1.0.0-beta.2-86f844e",
+    "libsql": "catalog:",
     "zod": "^4.1.11"
   }
 }
