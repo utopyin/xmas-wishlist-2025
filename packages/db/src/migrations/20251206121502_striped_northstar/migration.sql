@@ -1,0 +1,1 @@
+ALTER TABLE `ideas` ADD `is_picked` integer DEFAULT 0 NOT NULL;

@@ -1,3 +1,4 @@
+import openSansWoff2 from "@fontsource-variable/nunito/files/nunito-latin-wght-normal.woff2?url";
 import type { QueryClient } from "@tanstack/react-query";
 import {
     createRootRouteWithContext,
@@ -8,6 +9,8 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { Toaster } from "@/components/ui/sonner";
 import appCss from "../index.css?url";
+import "@fontsource-variable/nunito";
+import "@fontsource-variable/geist-mono";
 
 export type RouterAppContext = {
     queryClient: QueryClient;
@@ -23,7 +26,16 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
             },
             { title: "Wishlist de Matteo 🎁🎄 Noël 2025" },
         ],
-        links: [{ rel: "stylesheet", href: appCss }],
+        links: [
+            { rel: "stylesheet", href: appCss },
+            {
+                rel: "preload",
+                href: openSansWoff2 as string,
+                as: "font",
+                type: "font/woff2",
+                crossOrigin: "anonymous",
+            },
+        ],
     }),
 
     component: RootDocument,
@@ -31,12 +43,12 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
 function RootDocument() {
     return (
-        <html lang="en">
+        <html lang="fr">
             <head>
                 <HeadContent />
             </head>
             <body>
-                <div className="grid h-svh grid-rows-[auto_1fr]">
+                <div className="grid h-svh grid-rows-[auto_1fr] font-sans">
                     <Outlet />
                 </div>
                 <Toaster richColors />
