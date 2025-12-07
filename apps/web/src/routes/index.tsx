@@ -38,8 +38,7 @@ function HomeComponent() {
 
     const transform = useTransform(() => {
         const percent = enteringAnimation.get() / 100;
-        const offset = 200 - percent * 200;
-        return `translateY(${scroll.scrollY.get() - offset}px)`;
+        return `translateY(${-200 + percent * 200}px)`;
     });
 
     const isScrolled = useMemo(() => {
@@ -82,27 +81,28 @@ function HomeComponent() {
                         ease: ANIMATION_EASE,
                     },
                 }}
-                className="flex h-[80svh] min-h-min shrink-0 flex-col justify-center"
+                className="-translate-y-1/2 fixed top-1/2 flex h-[80svh] max-w-[calc(100svw-2rem)] flex-col justify-center"
                 initial={{ filter: "blur(10px)", opacity: 0 }}
                 style={{
                     filter: useMotionTemplate`blur(${blur}px)`,
                     transform,
                 }}
             >
-                <Letter className="shrink-0 translate-y-[5svh]" />
+                <Letter className="-translate-y-[5svh] w-full" />
             </motion.div>
             <ProgressiveBlur
                 className="fixed h-50"
                 intensity={progressiveBlurAmount}
                 position="bottom"
             />
+            <div className="h-[80svh] w-full max-w-[min(48rem,calc(100svw-2rem))]" />
             <Wishlist />
         </div>
     );
 }
 
 const Wishlist = () => (
-    <div className="z-10 flex h-[70svh] w-full max-w-[min(48rem,calc(100svw-2rem))] flex-col items-center rounded-t-2xl rounded-b-none bg-card">
+    <div className="z-10 flex h-[85svh] w-full max-w-[min(48rem,calc(100svw-2rem))] flex-col items-center rounded-t-2xl rounded-b-none bg-card">
         <h1>Wishlist</h1>
     </div>
 );
