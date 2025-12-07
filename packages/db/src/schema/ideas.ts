@@ -10,6 +10,7 @@ export const ideas = sqliteTable("ideas", {
     isPicked: integer("is_picked", { mode: "boolean" })
         .notNull()
         .default(false),
+    imageUrl: text("image_url"),
     price: integer("price", { mode: "number" }),
     createdAt: integer("created_at", { mode: "timestamp" })
         .notNull()

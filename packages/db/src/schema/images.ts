@@ -13,3 +13,5 @@ export const images = sqliteTable("images", {
         .notNull()
         .default(sql`CURRENT_TIMESTAMP`),
 });
+
+export type Image = typeof images.$inferSelect;
