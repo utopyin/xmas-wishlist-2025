@@ -8,5 +8,5 @@ const listIdeasServerFn = createServerFn().handler(() =>
 
 export const listIdeasQueryOptions = queryOptions({
     queryKey: ["ideas"],
-    queryFn: listIdeasServerFn,
+    queryFn: () => listIdeasServerFn(),
 });

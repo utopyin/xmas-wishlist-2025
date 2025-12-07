@@ -1,10 +1,11 @@
-export const Letter = () => (
+export const Letter = (props: React.ComponentProps<"svg">) => (
     <svg
         fill="none"
         height="150"
         viewBox="0 0 449 150"
         width="449"
         xmlns="http://www.w3.org/2000/svg"
+        {...props}
     >
         <title>Lettre au père Noël</title>
         <g clip-path="url(#clip0_58_1165)">
