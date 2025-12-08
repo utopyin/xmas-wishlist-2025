@@ -53,7 +53,8 @@
         "noUnusedImports": "warn"
       },
       "nursery": {
-        "noUnnecessaryConditions": "off"
+        "noUnnecessaryConditions": "off",
+        "noLeakedRender": "off"
       },
       "performance": {
         "noImgElement": "off",

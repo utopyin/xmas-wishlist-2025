@@ -1,0 +1,1 @@
+ALTER TABLE `ideas` RENAME COLUMN `is_picked` TO `picked_by`;

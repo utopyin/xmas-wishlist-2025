@@ -3,13 +3,11 @@ import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const ideas = sqliteTable("ideas", {
-    id: text("id").$defaultFn(nanoid),
+    id: text("id").primaryKey().$defaultFn(nanoid),
     title: text("title").notNull(),
     description: text("description"),
     link: text("link"),
-    isPicked: integer("is_picked", { mode: "boolean" })
-        .notNull()
-        .default(false),
+    pickedBy: text("picked_by"),
     imageUrl: text("image_url"),
     price: integer("price", { mode: "number" }),
     createdAt: integer("created_at", { mode: "timestamp" })

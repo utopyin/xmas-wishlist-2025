@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { GiftSmall, Link4Small } from "@utopyin/nucleo";
+import { GiftSmall, Link4Small, UTurnToLeftSmall } from "@utopyin/nucleo";
 import {
     animate,
     type Easing,
@@ -13,14 +13,25 @@ import {
 import { useEffect, useMemo } from "react";
 import { Letter } from "@/components/letter";
 import { ProgressiveBlur } from "@/components/progressive-blur";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonTransition } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { type Idea, listIdeasQueryOptions } from "@/queries/list-ideas";
+import { getDeviceId, useDeviceId } from "@/lib/use-device-id";
+import {
+    getListIdeasQueryOptions,
+    type Idea,
+    PickedBy,
+} from "@/queries/list-ideas";
+import {
+    usePickIdeaMutation,
+    useUnpickIdeaMutation,
+} from "@/queries/pick-unpick-idea";
 
 export const Route = createFileRoute("/")({
     component: HomeComponent,
-    loader: ({ context: { queryClient } }) =>
-        queryClient.ensureQueryData(listIdeasQueryOptions),
+    loader: ({ context: { queryClient } }) => {
+        const deviceId = getDeviceId();
+        return queryClient.ensureQueryData(getListIdeasQueryOptions(deviceId));
+    },
 });
 
 const ANIMATION_DURATION = 1.5;
@@ -69,7 +80,6 @@ function HomeComponent() {
                     opacity: 1,
                     transition: {
                         opacity: {
-                            // biome-ignore lint/nursery/noLeakedRender: wrongly catched by biome?
                             duration: isScrolled ? 0 : ANIMATION_DURATION,
                         },
                         duration: ANIMATION_DURATION,
@@ -97,7 +107,11 @@ function HomeComponent() {
 }
 
 const Wishlist = () => {
-    const { data, isLoading } = useQuery(listIdeasQueryOptions);
+    const { deviceId, isLoading: isDeviceIdLoading } = useDeviceId();
+    const { data, isLoading: isListIdeasLoading } = useQuery(
+        getListIdeasQueryOptions(deviceId)
+    );
+    const isLoading = isDeviceIdLoading || isListIdeasLoading;
 
     const isScrolled = useIsScrolled();
 
@@ -162,46 +176,81 @@ const WidthlistSkeleton = () =>
         </div>
     ));
 
-const IdeaCard = ({ idea }: { idea: Idea }) => (
-    <div className="flex min-h-40 w-full rounded-2xl bg-background p-1">
-        <div className="aspect-square h-full rounded-xl bg-white">
-            {idea.imageUrl ? (
-                <img
-                    alt={idea.title}
-                    className="size-full rounded-xl object-contain"
-                    height={120}
-                    src={idea.imageUrl}
-                    width={120}
-                />
-            ) : null}
-        </div>
-        <div className="flex flex-col">
-            <div className="flex flex-col gap-1 px-2 py-1.5">
-                <p className="font-medium">{idea.title}</p>
-                <p className="text-muted-foreground text-sm">
-                    {idea.description}
-                </p>
+const IdeaCard = ({ idea }: { idea: Idea }) => {
+    const { deviceId, isLoading: isDeviceIdLoading } = useDeviceId();
+
+    const { mutate: pick, isPending: isPicking } = usePickIdeaMutation(idea.id);
+    const { mutate: unpick, isPending: isUnpicking } = useUnpickIdeaMutation(
+        idea.id
+    );
+    const isPending = isPicking || isUnpicking || isDeviceIdLoading;
+
+    const icon = idea.pickedBy === PickedBy.me ? UTurnToLeftSmall : GiftSmall;
+    const pickedText = idea.pickedBy === PickedBy.me ? "Annuler" : "Offert";
+    const pickText = idea.pickedBy ? pickedText : "Offrir";
+
+    return (
+        <div className="flex w-full flex-col items-center rounded-2xl bg-background p-1 sm:flex-row">
+            <div className="max-h-30 w-full rounded-xl bg-white sm:block sm:size-40 sm:max-h-none">
+                {idea.imageUrl ? (
+                    <img
+                        alt={idea.title}
+                        className="size-full rounded-xl object-contain"
+                        height={120}
+                        src={idea.imageUrl}
+                        width={120}
+                    />
+                ) : null}
             </div>
-            <div className="mt-auto flex w-full items-center justify-between p-2">
-                <p className="font-mono text-muted-foreground">
-                    {idea.price ? `${idea.price / 100} €` : "Inconnu"}
-                </p>
-                <div className="flex gap-3">
-                    {idea.link ? (
-                        <a
-                            className="flex items-center gap-1 font-medium text-sm"
-                            href={idea.link}
-                            target="_blank"
-                        >
-                            Ouvrir <Link4Small />
-                        </a>
-                    ) : null}
-                    <Button icon={GiftSmall} text="Offrir" />
+            <div className="flex flex-1 flex-col">
+                <div className="flex flex-col gap-1 px-2 py-1.5">
+                    <p className="font-medium">{idea.title}</p>
+                    <p className="text-muted-foreground text-sm">
+                        {idea.description}
+                    </p>
+                </div>
+                <div className="mt-auto flex w-full items-center justify-between gap-2 p-2">
+                    <p className="whitespace-nowrap font-mono text-muted-foreground">
+                        {idea.price ? `${idea.price / 100} €` : "Inconnu"}
+                    </p>
+                    <div className="flex gap-3">
+                        {idea.link ? (
+                            <motion.a
+                                className="flex items-center gap-1 font-medium text-sm"
+                                href={idea.link}
+                                key="link"
+                                layout="position"
+                                target="_blank"
+                                transition={ButtonTransition}
+                            >
+                                Ouvrir <Link4Small />
+                            </motion.a>
+                        ) : null}
+                        <Button
+                            disabled={
+                                idea.pickedBy === PickedBy.someone || isPending
+                            }
+                            icon={icon}
+                            onClick={() => {
+                                if (!deviceId) return;
+                                return idea.pickedBy
+                                    ? unpick(deviceId)
+                                    : pick(deviceId);
+                            }}
+                            showLoading={isPending}
+                            text={isPending ? "Traitement" : pickText}
+                            variant={
+                                idea.pickedBy === PickedBy.me
+                                    ? "destructive"
+                                    : "default"
+                            }
+                        />
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 const useIsScrolled = () =>
     useMemo(() => {
