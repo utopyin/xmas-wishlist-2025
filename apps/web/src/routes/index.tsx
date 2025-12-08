@@ -43,10 +43,7 @@ function HomeComponent() {
         return `translateY(${-200 + percent * 200}px)`;
     });
 
-    const isScrolled = useMemo(() => {
-        if (typeof window === "undefined") return false;
-        return window.scrollY / document.body.scrollHeight > 0.2;
-    }, []);
+    const isScrolled = useIsScrolled();
 
     useEffect(() => {
         if (isScrolled) {
@@ -102,8 +99,24 @@ function HomeComponent() {
 const Wishlist = () => {
     const { data, isLoading } = useQuery(listIdeasQueryOptions);
 
+    const isScrolled = useIsScrolled();
+
     return (
-        <div className="z-10 flex h-[85svh] w-full max-w-[min(48rem,calc(100svw-2rem))] flex-col items-center gap-3 rounded-t-2xl rounded-b-none bg-card px-3 pt-3 pb-0">
+        <motion.div
+            animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+            className="z-10 flex h-[85svh] w-full max-w-[min(48rem,calc(100svw-2rem))] flex-col items-center gap-3 rounded-t-2xl rounded-b-none bg-card px-3 pt-3 pb-0"
+            initial={{
+                opacity: 0,
+                y: 50,
+                scale: 1.1,
+                filter: "blur(10px)",
+            }}
+            transition={{
+                duration: isScrolled ? 0 : 1,
+                delay: isScrolled ? 0 : 1.7,
+                ease: "easeInOut",
+            }}
+        >
             <div className="flex h-15 w-full items-center justify-between">
                 <div className="flex items-center gap-2">
                     <img
@@ -137,7 +150,7 @@ const Wishlist = () => {
                     Merci de revenir plus tard !
                 </p>
             )}
-        </div>
+        </motion.div>
     );
 };
 
@@ -189,3 +202,9 @@ const IdeaCard = ({ idea }: { idea: Idea }) => (
         </div>
     </div>
 );
+
+const useIsScrolled = () =>
+    useMemo(() => {
+        if (typeof window === "undefined") return false;
+        return window.scrollY / document.body.scrollHeight > 0.1;
+    }, []);
