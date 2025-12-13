@@ -8,14 +8,16 @@ const listIdeasServerFn = createServerFn()
     .handler(async ({ data: { deviceId } }) => {
         const ideas = await db.query.ideas.findMany();
 
-        return ideas.map((idea) => {
-            const pickedBy =
-                idea.pickedBy === deviceId ? PickedBy.me : PickedBy.someone;
-            return {
-                ...idea,
-                pickedBy: idea.pickedBy ? pickedBy : null,
-            };
-        });
+        return ideas
+            .sort((a, b) => a.index - b.index)
+            .map((idea) => {
+                const pickedBy =
+                    idea.pickedBy === deviceId ? PickedBy.me : PickedBy.someone;
+                return {
+                    ...idea,
+                    pickedBy: idea.pickedBy ? pickedBy : null,
+                };
+            });
     });
 
 export const getListIdeasQueryOptions = (deviceId?: string) =>

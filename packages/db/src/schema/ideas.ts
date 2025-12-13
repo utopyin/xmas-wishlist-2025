@@ -7,6 +7,7 @@ export const ideas = sqliteTable("ideas", {
     title: text("title").notNull(),
     description: text("description"),
     link: text("link"),
+    index: integer("index", { mode: "number" }).notNull().default(0),
     pickedBy: text("picked_by"),
     imageUrl: text("image_url"),
     price: integer("price", { mode: "number" }),

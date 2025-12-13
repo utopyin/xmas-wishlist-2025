@@ -1,0 +1,1 @@
+ALTER TABLE `ideas` ADD `index` integer DEFAULT 0;
