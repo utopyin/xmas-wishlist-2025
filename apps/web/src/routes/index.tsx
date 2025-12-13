@@ -202,7 +202,7 @@ const IdeaCard = ({ idea }: { idea: Idea }) => {
                     />
                 ) : null}
             </div>
-            <div className="flex flex-1 flex-col">
+            <div className="flex h-full w-full flex-1 flex-col justify-between">
                 <div className="flex flex-col gap-1 px-2 py-1.5">
                     <p className="font-medium">{idea.title}</p>
                     <p className="text-muted-foreground text-sm">
