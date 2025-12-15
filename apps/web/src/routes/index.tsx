@@ -187,7 +187,7 @@ const IdeaCard = ({ idea }: { idea: Idea }) => {
 
     const icon = idea.pickedBy === PickedBy.me ? UTurnToLeftSmall : GiftSmall;
     const pickedText = idea.pickedBy === PickedBy.me ? "Annuler" : "Offert";
-    const pickText = idea.pickedBy ? pickedText : "Offrir";
+    const pickText = idea.pickedBy ? pickedText : "Choisir";
 
     return (
         <div className="flex w-full flex-col items-center rounded-2xl bg-background p-1 sm:flex-row">
